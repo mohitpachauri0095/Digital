@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-college-light/20 text-college-dark transition-colors duration-300;
+  }
+  
+  body.dark {
+    @apply bg-college-dark text-college-light;
+  }
+}
+
+/* Custom styles for toast notifications matching dark mode */
+.dark .go3958317564 { /* Class for react-hot-toast wrapper */
+  background: #163832 !important;
+  color: #DAF1DE !important;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  @apply bg-white/70 backdrop-blur-lg border border-college-accent/20 shadow-sm;
+}
+
+.dark .glass {
+  @apply bg-college-primary/70 backdrop-blur-lg border border-college-secondary/50 shadow-sm;
+}
+
+/* Hide scrollbar for category filter but allow scroll */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
