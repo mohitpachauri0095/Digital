@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
     if (token && username) {
-      setAdmin({ token, username });
+      setAdmin({ token, username }); 
     }
   }, []);
 
