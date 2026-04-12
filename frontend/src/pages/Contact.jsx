@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Send } from 'lucide-react';
-import Footer from '../components/Footer';
 
 const Contact = () => {
   const containerVariants = {
@@ -156,7 +155,6 @@ const Contact = () => {
 
       </div>
 
-      <Footer />
     </div>
   );
 };

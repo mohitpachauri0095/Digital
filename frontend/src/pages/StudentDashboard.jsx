@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import NoticeCard from '../components/NoticeCard';
 import ChatbotWidget from '../components/ChatbotWidget';
+import Footer from '../components/Footer';
+import Events from './Events';
+import Contact from './Contact';
 import { Search, Flame, Inbox, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -165,6 +168,18 @@ const StudentDashboard = () => {
           )}
         </div>
       </AnimatePresence>
+
+      <div className="mt-20">
+        <Events />
+      </div>
+      
+      <div className="mt-10">
+        <Contact />
+      </div>
+
+      <div className="mt-10">
+        <Footer />
+      </div>
 
       <ChatbotWidget />
     </motion.div>

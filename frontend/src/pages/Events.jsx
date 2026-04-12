@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, MapPin } from 'lucide-react';
-import Footer from '../components/Footer';
 
 const Events = () => {
   // Sample events data
@@ -143,7 +142,6 @@ const Events = () => {
 
       </div>
 
-      <Footer />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Notice = require('../models/Notice');
+const ChatHistory = require('../models/ChatHistory');
 const { GoogleGenAI } = require('@google/genai');
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "dummy_key" });
@@ -30,6 +31,7 @@ Answer the student's question based on the context above. If the context doesn't
 
     let aiResponseText = null;
     let shouldUseFallback = true;
+    let finalReply = "";
     
     // Attempt to call Gemini AI API
     if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== "your_api_key_here" && process.env.GEMINI_API_KEY !== "dummy_key") {
@@ -41,7 +43,7 @@ Answer the student's question based on the context above. If the context doesn't
         
         aiResponseText = response.text || "I'm having trouble thinking, but you can check out the notices on the board!";
         shouldUseFallback = false;
-        res.json({ reply: aiResponseText });
+        finalReply = aiResponseText;
       } catch (apiError) {
         console.error("Gemini API Error, falling back to mock logic:", apiError.message);
         shouldUseFallback = true;
@@ -54,30 +56,43 @@ Answer the student's question based on the context above. If the context doesn't
       
       // Handle greetings
       if (/^(hi|hello|hey|hee|greetings|hola)/.test(lowercaseMsg)) {
-        return res.json({ reply: "Hello! I'm the AI Notice Assistant. How can I help you with your college updates today?" });
-      }
-      
-      // Match against notices
-      let foundNotice = recentNotices.find(n => 
-        lowercaseMsg.includes((n.category || '').toLowerCase()) || 
-        lowercaseMsg.includes('notice') || 
-        n.title.toLowerCase().includes(lowercaseMsg) ||
-        lowercaseMsg.includes(n.title.toLowerCase())
-      );
-      
-      if (foundNotice && lowercaseMsg.length > 3) {
-        res.json({ reply: `Based on your question, here's what I found: ${foundNotice.title}. ${foundNotice.aiSummary || foundNotice.content.substring(0, 80)}... Let me know if you need more details!` });
-      } else {
-        // Generic fallback that sounds AI-like
-        const genericResponses = [
-          "I'm here to help! I can provide details about Exams, Placements, Events, and other General notices. What specific topic are you interested in?",
-          "I couldn't find a specific notice matching your exact phrasing, but feel free to ask about exams or upcoming events!",
-          "I'm analyzing the latest college updates. Please be more specific about whether you're looking for exam schedules, placement news, or upcoming campus events."
-        ];
-        const randomResponse = genericResponses[Math.floor(Math.random() * genericResponses.length)];
-        res.json({ reply: randomResponse });
+        finalReply = "Hello! I'm the AI Notice Assistant. How can I help you with your college updates today?";
+      } 
+      else {
+        // Match against notices
+        let foundNotice = recentNotices.find(n => 
+          lowercaseMsg.includes((n.category || '').toLowerCase()) || 
+          lowercaseMsg.includes('notice') || 
+          n.title.toLowerCase().includes(lowercaseMsg) ||
+          lowercaseMsg.includes(n.title.toLowerCase())
+        );
+        
+        if (foundNotice && lowercaseMsg.length > 3) {
+          finalReply = `Based on your question, here's what I found: ${foundNotice.title}. ${foundNotice.aiSummary || foundNotice.content.substring(0, 80)}... Let me know if you need more details!`;
+        } else {
+          // Generic fallback that sounds AI-like
+          const genericResponses = [
+            "I'm here to help! I can provide details about Exams, Placements, Events, and other General notices. What specific topic are you interested in?",
+            "I couldn't find a specific notice matching your exact phrasing, but feel free to ask about exams or upcoming events!",
+            "I'm analyzing the latest college updates. Please be more specific about whether you're looking for exam schedules, placement news, or upcoming campus events."
+          ];
+          finalReply = genericResponses[Math.floor(Math.random() * genericResponses.length)];
+        }
       }
     }
+
+    // Save interaction to MongoDB Database
+    try {
+      const newChat = new ChatHistory({
+        userMessage: message,
+        aiReply: finalReply
+      });
+      await newChat.save();
+    } catch (dbErr) {
+      console.error("Failed to save chat to MongoDB:", dbErr);
+    }
+
+    res.json({ reply: finalReply });
 
   } catch (error) {
     console.error("Chat Error:", error);

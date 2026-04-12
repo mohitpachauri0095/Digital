@@ -1,21 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
-// In-memory user store
-const users = [];
-
-// Initialize with a default admin so they can still log in
-const initDefaultAdmin = async () => {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash("admin123", salt);
-  users.push({
-    id: "1",
-    username: "admin",
-    email: "admin@example.com",
-    password: hashedPassword,
-  });
-};
-initDefaultAdmin();
+const Admin = require("../models/Admin");
 
 exports.register = async (req, res) => {
   try {
@@ -25,7 +10,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const existingUser = users.find(u => u.username === username || u.email === email);
+    const existingUser = await Admin.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
       return res.status(400).json({ error: "Username or email already exists" });
     }
@@ -33,14 +18,13 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    const newUser = {
-      id: Date.now().toString(),
+    const newUser = new Admin({
       username,
       email,
       password: hashedPassword
-    };
+    });
     
-    users.push(newUser);
+    await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -51,14 +35,14 @@ exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
     
-    const user = users.find(u => u.username === username);
+    const user = await Admin.findOne({ username });
     if (!user) return res.status(400).json({ error: "Invalid credentials" });
     
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
     
     const token = jwt.sign(
-      { id: user.id, username: user.username },
+      { id: user._id, username: user.username },
       process.env.JWT_SECRET || "default_secret",
       { expiresIn: "1d" }
     );
@@ -77,7 +61,7 @@ exports.forgotPassword = async (req, res) => {
       return res.status(400).json({ error: "Email is required" });
     }
 
-    const user = users.find(u => u.email === email);
+    const user = await Admin.findOne({ email });
     if (!user) {
       // Return success anyway for security reasons to not leak emails, or error if prefer that
       return res.status(404).json({ error: "Email not found" });
