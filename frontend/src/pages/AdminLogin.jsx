@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { Lock, User, LogIn } from 'lucide-react';
@@ -94,6 +94,18 @@ const AdminLogin = () => {
             )}
           </button>
         </form>
+        
+        <div className="flex flex-col space-y-4 mt-6 pt-6 border-t border-slate-100 text-center text-sm font-medium">
+          <Link to="/forgot-password" className="text-blue-600 hover:text-blue-800 transition-colors">
+            Forgot Password?
+          </Link>
+          <div className="text-slate-600">
+            Don't have an account?{' '}
+            <Link to="/register" className="text-blue-600 hover:text-blue-800 transition-colors">
+              Register
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

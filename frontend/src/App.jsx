@@ -12,6 +12,8 @@ import AddNotice from './pages/AddNotice';
 import NoticeDetails from './pages/NoticeDetails';
 import Events from './pages/Events';
 import Contact from './pages/Contact';
+import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 
 // Custom Private Route implementation
 const PrivateRoute = ({ children }) => {
@@ -82,6 +84,8 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/notice/:id" element={<NoticeDetails />} />
                 <Route path="/admin-login" element={<AdminLogin />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route 
                   path="/admin" 
                   element={
