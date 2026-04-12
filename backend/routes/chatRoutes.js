@@ -28,17 +28,27 @@ ${noticesData}
 
 Answer the student's question based on the context above. If the context doesn't have the exact answer or their question is general, be helpful and conversational. Keep your response concise (3-4 sentences max). Do not use markdown like asterisks in your response; plain text is best.`;
 
+    let aiResponseText = null;
+    let shouldUseFallback = true;
+    
     // Attempt to call Gemini AI API
     if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== "your_api_key_here" && process.env.GEMINI_API_KEY !== "dummy_key") {
-      const response = await ai.models.generateContent({
-          model: 'gemini-1.5-flash',
-          contents: prompt,
-      });
-      
-      const aiResponseText = response.text || "I'm having trouble thinking, but you can check out the notices on the board!";
-      
-      res.json({ reply: aiResponseText });
-    } else {
+      try {
+        const response = await ai.models.generateContent({
+            model: 'gemini-1.5-flash',
+            contents: prompt,
+        });
+        
+        aiResponseText = response.text || "I'm having trouble thinking, but you can check out the notices on the board!";
+        shouldUseFallback = false;
+        res.json({ reply: aiResponseText });
+      } catch (apiError) {
+        console.error("Gemini API Error, falling back to mock logic:", apiError.message);
+        shouldUseFallback = true;
+      }
+    } 
+
+    if (shouldUseFallback) {
       // Intelligent fallback simulating an AI response for demonstration purposes
       const lowercaseMsg = message.toLowerCase();
       
