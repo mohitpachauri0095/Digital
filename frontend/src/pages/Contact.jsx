@@ -20,21 +20,21 @@ const Contact = () => {
     {
       icon: <MapPin size={28} className="text-blue-500" />,
       title: "Our Address",
-      details: "123 Innovation Drive, Tech Campus, CA 90210",
+      details: "Gla University Mathura",
       color: "from-blue-500/20 to-blue-600/5",
       borderColor: "border-blue-500/30"
     },
     {
       icon: <Phone size={28} className="text-purple-500" />,
       title: "Phone Number",
-      details: "+1 (800) 123-4567\nMon-Fri: 9am - 5pm",
+      details: "+91 8171683933\nMon-Fri: 9am - 5pm",
       color: "from-purple-500/20 to-purple-600/5",
       borderColor: "border-purple-500/30"
     },
     {
       icon: <Mail size={28} className="text-pink-500" />,
       title: "Email Address",
-      details: "contact@techcollege.edu\nsupport@techcollege.edu",
+      details: "deepak.kumar@gla\nvishal.singh@gla.ac",
       color: "from-pink-500/20 to-pink-600/5",
       borderColor: "border-pink-500/30"
     }

@@ -37,7 +37,7 @@ const Navbar = () => {
     <header className="bg-college-dark/95 backdrop-blur-md text-college-light sticky top-0 z-50 border-b border-college-accent/20 shadow-lg transition-colors duration-300">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <Link to="/" className="text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-college-light to-college-accent hover:scale-105 transition-transform">
-          EduBoard
+          MVD University
         </Link>
         <div className="flex items-center gap-8">
           <nav className="hidden md:flex gap-6">
