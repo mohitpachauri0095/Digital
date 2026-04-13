@@ -115,9 +115,9 @@ const Contact = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="rounded-3xl overflow-hidden glass shadow-2xl border-slate-200 dark:border-slate-700 relative min-h-[400px]"
           >
-            {/* Using a Google Maps embed iframe */}
+            {/* Using a Google Maps embed iframe for GLA University */}
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d105073.44367005252!2d-118.29179684999999!3d34.02073045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sLos%20Angeles%2C%20CA%2C%20USA!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+              src="https://maps.google.com/maps?q=27.6056,77.5937&z=15&output=embed" 
               className="absolute inset-0 w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
               allowFullScreen="" 
               loading="lazy" 
