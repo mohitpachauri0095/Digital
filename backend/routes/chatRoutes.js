@@ -8,7 +8,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "dummy_key" }
 
 router.post('/', async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, studentType = 'General' } = req.body;
     
     if (!message) {
       return res.status(400).json({ error: "Message is required" });
@@ -22,6 +22,7 @@ router.post('/', async (req, res) => {
     });
 
     const prompt = `You are a helpful and polite "AI Notice Assistant" for a college digital notice board.
+The student asking this is a "${studentType}" student. Take their student type into account to provide a more personalized answer.
 The student asked: "${message}"
 
 Context (Latest Notices): 
@@ -85,7 +86,8 @@ Answer the student's question based on the context above. If the context doesn't
     try {
       const newChat = new ChatHistory({
         userMessage: message,
-        aiReply: finalReply
+        aiReply: finalReply,
+        studentType: studentType
       });
       await newChat.save();
     } catch (dbErr) {
