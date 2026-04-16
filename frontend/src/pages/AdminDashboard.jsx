@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import NoticeCard from '../components/NoticeCard';
-import { PlusCircle, LogOut } from 'lucide-react';
+import { PlusCircle, LogOut, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -51,7 +51,13 @@ const AdminDashboard = () => {
           <h2 className="text-2xl font-extrabold text-slate-800 dark:text-white">Admin Dashboard</h2>
           <p className="text-slate-500 dark:text-slate-400 mt-1">Manage platform notices and announcements</p>
         </div>
-        <div className="flex gap-4 w-full md:w-auto">
+        <div className="flex flex-wrap gap-3 w-full md:w-auto">
+          <Link 
+            to="/"
+            className="flex-1 md:flex-none justify-center bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
+          >
+            <Globe size={20}/> View Website
+          </Link>
           <Link 
             to="/admin/add-notice"
             className="flex-1 md:flex-none justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-md hover:shadow-lg"
