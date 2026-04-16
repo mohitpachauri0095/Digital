@@ -37,8 +37,9 @@ const ChatbotWidget = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/chat', { message: userMsg, studentType });
+      const replyText = response?.data?.reply || "Sorry, I couldn't understand that properly.";
       setMessages(prev => [...prev, { 
-        text: response.data.reply, 
+        text: replyText, 
         isBot: true,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);

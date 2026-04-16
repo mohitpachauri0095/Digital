@@ -42,9 +42,14 @@ Answer the student's question based on the context above. If the context doesn't
             contents: prompt,
         });
         
-        aiResponseText = response.text || "I'm having trouble thinking, but you can check out the notices on the board!";
-        shouldUseFallback = false;
-        finalReply = aiResponseText;
+        aiResponseText = response.text;
+        
+        if (aiResponseText) {
+          shouldUseFallback = false;
+          finalReply = aiResponseText;
+        } else {
+          throw new Error("Empty response from AI");
+        }
       } catch (apiError) {
         console.error("Gemini API Error, falling back to mock logic:", apiError.message);
         shouldUseFallback = true;
@@ -61,12 +66,12 @@ Answer the student's question based on the context above. If the context doesn't
       } 
       else {
         // Match against notices
-        let foundNotice = recentNotices.find(n => 
-          lowercaseMsg.includes((n.category || '').toLowerCase()) || 
-          lowercaseMsg.includes('notice') || 
-          n.title.toLowerCase().includes(lowercaseMsg) ||
-          lowercaseMsg.includes(n.title.toLowerCase())
-        );
+        let foundNotice = recentNotices.find(n => {
+          const category = (n.category || '').toLowerCase();
+          const title = (n.title || '').toLowerCase();
+          return (category && lowercaseMsg.includes(category)) ||
+                 (title && (lowercaseMsg.includes(title) || title.includes(lowercaseMsg)));
+        });
         
         if (foundNotice && lowercaseMsg.length > 3) {
           finalReply = `Based on your question, here's what I found: ${foundNotice.title}. ${foundNotice.aiSummary || foundNotice.content.substring(0, 80)}... Let me know if you need more details!`;
