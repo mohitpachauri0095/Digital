@@ -5,7 +5,7 @@ import ChatbotWidget from '../components/ChatbotWidget';
 import Footer from '../components/Footer';
 import Events from './Events';
 import Contact from './Contact';
-import { Search, Flame, Inbox, Sparkles } from 'lucide-react';
+import { Search, Flame, Inbox } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const StudentDashboard = () => {
@@ -80,14 +80,6 @@ const StudentDashboard = () => {
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-college-accent opacity-20 rounded-full blur-[80px] pointer-events-none translate-y-1/3 -translate-x-1/4"></div>
         
         <div className="relative z-10 flex flex-col items-center">
-          <motion.div 
-            whileHover={{ rotate: 180 }}
-            transition={{ duration: 0.5 }}
-            className="p-4 bg-college-light/10 backdrop-blur-xl rounded-2xl mb-6 shadow-[0_0_40px_rgba(142,182,155,0.3)] border border-college-light/20 text-college-light"
-          >
-            <Sparkles size={36} />
-          </motion.div>
-          
           <h1 className="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-college-light to-white mb-6 tracking-tight leading-tight">
             Campus Pulse Hub
           </h1>
