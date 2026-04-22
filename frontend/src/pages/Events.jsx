@@ -1,8 +1,54 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Clock, MapPin, X } from 'lucide-react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Events = () => {
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    studentName: '',
+    studentEmail: '',
+    studentId: '',
+    studentType: 'General'
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleRegisterClick = (evt) => {
+    setSelectedEvent(evt);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      setSelectedEvent(null);
+      setFormData({ studentName: '', studentEmail: '', studentId: '', studentType: 'General' });
+    }, 200);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmitRegistration = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await axios.post('http://localhost:5000/api/events/register', {
+        eventId: selectedEvent.id.toString(),
+        eventName: selectedEvent.title,
+        ...formData
+      });
+      toast.success(`Successfully registered for ${selectedEvent.title}!`);
+      handleCloseModal();
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Registration failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   // Sample events data
   const eventsList = [
     {
@@ -130,6 +176,7 @@ const Events = () => {
                   <motion.button 
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={() => handleRegisterClick(evt)}
                     className="mt-6 w-full py-2.5 rounded-xl bg-slate-800 dark:bg-white/10 text-white font-medium shadow-md hover:bg-black dark:hover:bg-white/20 transition-colors"
                   >
                     Register Now
@@ -141,6 +188,104 @@ const Events = () => {
         </div>
 
       </div>
+      
+      {/* Registration Modal */}
+      <AnimatePresence>
+        {isModalOpen && selectedEvent && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={handleCloseModal}
+            ></motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6 md:p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={handleCloseModal}
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={24} />
+              </button>
+              
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Register for Event</h2>
+              <p className="text-blue-600 dark:text-blue-400 font-medium mb-6">{selectedEvent.title}</p>
+              
+              <form onSubmit={handleSubmitRegistration} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
+                  <input 
+                    type="text" 
+                    name="studentName"
+                    value={formData.studentName}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white"
+                    placeholder="e.g. Rahul Sharma"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
+                  <input 
+                    type="email" 
+                    name="studentEmail"
+                    value={formData.studentEmail}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white"
+                    placeholder="rahul@college.edu"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Student ID/Roll No</label>
+                    <input 
+                      type="text" 
+                      name="studentId"
+                      value={formData.studentId}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white"
+                      placeholder="e.g. 2110292"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Course</label>
+                    <select 
+                      name="studentType"
+                      value={formData.studentType}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white"
+                    >
+                      <option value="General">General</option>
+                      <option value="B.Tech">B.Tech</option>
+                      <option value="MCA">MCA</option>
+                      <option value="MBA">MBA</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Registering...' : 'Confirm Registration'}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );

@@ -9,6 +9,7 @@ const noticeRoutes = require("./routes/noticeRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const eventRoutes = require("./routes/eventRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,6 +30,7 @@ app.use("/api/notices", noticeRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/events", eventRoutes);
 
 // Root route
 app.get("/", (req, res) => {
