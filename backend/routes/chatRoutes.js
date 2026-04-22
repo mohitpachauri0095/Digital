@@ -107,4 +107,15 @@ Answer the student's question based on the context above. If the context doesn't
   }
 });
 
+// GET all chat history (Admin only typically, but adding simple route here)
+router.get('/history', async (req, res) => {
+  try {
+    const history = await ChatHistory.find().sort({ timestamp: -1 });
+    res.json(history);
+  } catch (error) {
+    console.error("Failed to fetch chat history:", error);
+    res.status(500).json({ error: "Failed to fetch chat history" });
+  }
+});
+
 module.exports = router;
