@@ -120,9 +120,9 @@ const Events = () => {
       <div className="absolute -bottom-8 left-40 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-[100px] opacity-20 animate-blob animation-delay-4000 dark:opacity-30"></div>
 
       <div className="container mx-auto px-4 py-16 relative z-10">
-        
+
         {/* Header Section */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -177,12 +177,12 @@ const Events = () => {
                   <div className="inline-block mt-auto mb-4 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-300 w-max border border-slate-200 dark:border-slate-700">
                     Registration Fee: {evt.fee}
                   </div>
-                  
+
                   <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed border-t border-slate-200 dark:border-slate-700/50 pt-4">
                     {evt.description}
                   </p>
-                  
-                  <motion.button 
+
+                  <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleRegisterClick(evt)}
@@ -197,7 +197,7 @@ const Events = () => {
         </div>
 
       </div>
-      
+
       {/* Registration Modal */}
       <AnimatePresence>
         {isModalOpen && selectedEvent && (
@@ -209,7 +209,7 @@ const Events = () => {
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={handleCloseModal}
             ></motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -217,21 +217,21 @@ const Events = () => {
               className="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl p-6 md:p-8"
               onClick={(e) => e.stopPropagation()}
             >
-              <button 
+              <button
                 onClick={handleCloseModal}
                 className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X size={24} />
               </button>
-              
+
               <h2 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Register for Event</h2>
               <p className="text-blue-600 dark:text-blue-400 font-medium mb-6">{selectedEvent.title}</p>
-              
+
               <form onSubmit={handleSubmitRegistration} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="studentName"
                     value={formData.studentName}
                     onChange={handleInputChange}
@@ -240,11 +240,11 @@ const Events = () => {
                     placeholder="e.g. Rahul Sharma"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email Address</label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     name="studentEmail"
                     value={formData.studentEmail}
                     onChange={handleInputChange}
@@ -253,12 +253,12 @@ const Events = () => {
                     placeholder="rahul@college.edu"
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Student ID/Roll No</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="studentId"
                       value={formData.studentId}
                       onChange={handleInputChange}
@@ -269,7 +269,7 @@ const Events = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Course</label>
-                    <select 
+                    <select
                       name="studentType"
                       value={formData.studentType}
                       onChange={handleInputChange}
@@ -282,7 +282,7 @@ const Events = () => {
                     </select>
                   </div>
                 </div>
-                
+
                 {selectedEvent.fee !== "Free" && (
                   <div className="mt-4 p-4 bg-blue-50 dark:bg-slate-800/50 border border-blue-100 dark:border-blue-900/50 rounded-xl">
                     <h3 className="text-sm font-semibold text-slate-800 dark:text-white mb-3">Payment details (Fee: {selectedEvent.fee})</h3>
@@ -290,21 +290,21 @@ const Events = () => {
                       {/* Placeholder for User's actual QR Code */}
                       <div className="flex-shrink-0 w-32 h-32 bg-white rounded-lg p-2 shadow-sm border border-slate-200 overflow-hidden flex items-center justify-center">
                         <img 
-                          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=your-upi-id-here@upi" 
-                          alt="Payment QR Code" 
+                          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=8171683933@ptsbi" 
+                          alt="Payment QR Code for Deepak Kumar" 
                           className="w-full h-full object-contain"
                         />
                       </div>
                       <div className="text-sm text-slate-600 dark:text-slate-300 flex-1">
                         <p className="mb-2">1. Scan the QR code using any UPI app (GPay, PhonePe, Paytm, etc.)</p>
-                        <p className="mb-2">2. Or pay directly to UPI ID: <span className="font-bold text-slate-800 dark:text-white bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">your-upi-id-here@upi</span></p>
+                        <p className="mb-2">2. Or pay directly to UPI ID: <span className="font-bold text-slate-800 dark:text-white bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">8171683933@ptsbi</span></p>
                         <p className="text-xs text-slate-500 italic">Please note down the transaction ID after successful payment.</p>
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Transaction ID</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         name="transactionId"
                         value={formData.transactionId}
                         onChange={handleInputChange}
@@ -315,9 +315,9 @@ const Events = () => {
                     </div>
                   </div>
                 )}
-                
-                <button 
-                  type="submit" 
+
+                <button
+                  type="submit"
                   disabled={isSubmitting}
                   className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all shadow-lg hover:shadow-blue-500/30 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
