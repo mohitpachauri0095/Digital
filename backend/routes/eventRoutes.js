@@ -5,7 +5,7 @@ const EventRegistration = require('../models/EventRegistration');
 // POST /api/events/register
 router.post('/register', async (req, res) => {
   try {
-    const { eventId, eventName, studentName, studentEmail, studentId, studentType } = req.body;
+    const { eventId, eventName, studentName, studentEmail, studentId, studentType, transactionId } = req.body;
 
     if (!eventId || !eventName || !studentName || !studentEmail || !studentId) {
       return res.status(400).json({ error: 'Please provide all required fields' });
@@ -24,7 +24,8 @@ router.post('/register', async (req, res) => {
       studentName,
       studentEmail,
       studentId,
-      studentType
+      studentType,
+      transactionId
     });
     
     await newRegistration.save();

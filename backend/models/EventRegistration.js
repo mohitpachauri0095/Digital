@@ -7,6 +7,7 @@ const eventRegistrationSchema = new mongoose.Schema({
   studentEmail: { type: String, required: true },
   studentId: { type: String, required: true },
   studentType: { type: String, default: 'General' },
+  transactionId: { type: String },
   registrationDate: { type: Date, default: Date.now }
 });
 

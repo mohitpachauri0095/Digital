@@ -11,7 +11,8 @@ const Events = () => {
     studentName: '',
     studentEmail: '',
     studentId: '',
-    studentType: 'General'
+    studentType: 'General',
+    transactionId: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -24,7 +25,7 @@ const Events = () => {
     setIsModalOpen(false);
     setTimeout(() => {
       setSelectedEvent(null);
-      setFormData({ studentName: '', studentEmail: '', studentId: '', studentType: 'General' });
+      setFormData({ studentName: '', studentEmail: '', studentId: '', studentType: 'General', transactionId: '' });
     }, 200);
   };
 
@@ -57,6 +58,7 @@ const Events = () => {
       date: "Oct 15, 2026",
       time: "09:00 AM - 05:00 PM",
       location: "Main Auditorium",
+      fee: "₹500",
       description: "Join industry leaders for an immersive experience exploring the latest in AI, Web3, and Quantum Computing.",
       color: "from-blue-500/20 to-indigo-500/20",
       borderColor: "border-blue-500/30"
@@ -67,6 +69,7 @@ const Events = () => {
       date: "Nov 02-04, 2026",
       time: "48 Hours",
       location: "Innovation Hub",
+      fee: "₹200",
       description: "A 48-hour continuous coding challenge focused on sustainable tech solutions. Exciting prizes to be won!",
       color: "from-purple-500/20 to-pink-500/20",
       borderColor: "border-purple-500/30"
@@ -77,6 +80,7 @@ const Events = () => {
       date: "Dec 10, 2026",
       time: "06:00 PM - 09:00 PM",
       location: "College Campus Grounds",
+      fee: "₹1000",
       description: "Connect with successful alumni, expand your network, and enjoy an evening of food, music, and inspiring talks.",
       color: "from-emerald-500/20 to-teal-500/20",
       borderColor: "border-emerald-500/30"
@@ -87,6 +91,7 @@ const Events = () => {
       date: "Jan 18, 2027",
       time: "02:00 PM - 04:30 PM",
       location: "Seminar Room B",
+      fee: "₹150",
       description: "Learn how to pitch your ideas effectively to angel investors from seasoned entrepreneurs.",
       color: "from-orange-500/20 to-red-500/20",
       borderColor: "border-orange-500/30"
@@ -97,6 +102,7 @@ const Events = () => {
       date: "Feb 05, 2027",
       time: "10:00 AM - 03:00 PM",
       location: "VR Lab, CS Department",
+      fee: "Free",
       description: "Experience the latest student-developed VR applications across various domains like healthcare and gaming.",
       color: "from-cyan-500/20 to-blue-500/20",
       borderColor: "border-cyan-500/30"
@@ -167,6 +173,9 @@ const Events = () => {
                       <MapPin size={16} className="mr-3 text-blue-500" />
                       {evt.location}
                     </div>
+                  </div>
+                  <div className="inline-block mt-auto mb-4 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-300 w-max border border-slate-200 dark:border-slate-700">
+                    Registration Fee: {evt.fee}
                   </div>
                   
                   <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed border-t border-slate-200 dark:border-slate-700/50 pt-4">
@@ -273,6 +282,39 @@ const Events = () => {
                     </select>
                   </div>
                 </div>
+                
+                {selectedEvent.fee !== "Free" && (
+                  <div className="mt-4 p-4 bg-blue-50 dark:bg-slate-800/50 border border-blue-100 dark:border-blue-900/50 rounded-xl">
+                    <h3 className="text-sm font-semibold text-slate-800 dark:text-white mb-3">Payment details (Fee: {selectedEvent.fee})</h3>
+                    <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
+                      {/* Placeholder for User's actual QR Code */}
+                      <div className="flex-shrink-0 w-32 h-32 bg-white rounded-lg p-2 shadow-sm border border-slate-200 overflow-hidden flex items-center justify-center">
+                        <img 
+                          src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=your-upi-id-here@upi" 
+                          alt="Payment QR Code" 
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <div className="text-sm text-slate-600 dark:text-slate-300 flex-1">
+                        <p className="mb-2">1. Scan the QR code using any UPI app (GPay, PhonePe, Paytm, etc.)</p>
+                        <p className="mb-2">2. Or pay directly to UPI ID: <span className="font-bold text-slate-800 dark:text-white bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">your-upi-id-here@upi</span></p>
+                        <p className="text-xs text-slate-500 italic">Please note down the transaction ID after successful payment.</p>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Transaction ID</label>
+                      <input 
+                        type="text" 
+                        name="transactionId"
+                        value={formData.transactionId}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all dark:text-white"
+                        placeholder="e.g. T230912140922"
+                      />
+                    </div>
+                  </div>
+                )}
                 
                 <button 
                   type="submit" 
