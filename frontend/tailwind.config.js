@@ -5,17 +5,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {
-    extend: {
-      colors: {
-        college: {
-          dark: '#051F20',
-          primary: '#163832',
-          secondary: '#235347',
-          accent: '#8EB69B',
-          light: '#DAF1DE',
-        }
-      },
+
       animation: {
         'blob': 'blob 7s infinite',
         'marquee': 'marquee 25s linear infinite',
