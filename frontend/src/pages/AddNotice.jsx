@@ -4,7 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { UploadCloud, ArrowLeft, Send } from 'lucide-react';
 import toast from 'react-hot-toast';
-
+const AddNotice = () => {
+  const { admin } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   
   const [title, setTitle] = useState('');
