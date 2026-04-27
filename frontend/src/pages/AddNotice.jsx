@@ -6,7 +6,7 @@ import { UploadCloud, ArrowLeft, Send } from 'lucide-react';
 import toast from 'react-hot-toast';
 const AddNotice = () => {
   const { admin } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate()1;
 
   
   const [title, setTitle] = useState('');
