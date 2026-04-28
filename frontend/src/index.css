@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply bg-college-light/20 text-college-dark transition-colors duration-300;
-  }
+
   
   body.dark {
     @apply bg-college-dark text-college-light;
