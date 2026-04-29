@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Send } from 'lucide-react';
-import Footer from '../components/Footer';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // Send to your backend API first
+      await axios.post('http://localhost:5000/api/contact', formData);
+      toast.success('Message saved to system!');
+      
+      // Then re-direct to WhatsApp directly to your number
+      const whatsappNumber = "918171683933";
+      const text = `Hello MVD University!\nMy name is ${formData.name} (${formData.email}).\n\n${formData.message}`;
+      const encodedText = encodeURIComponent(text);
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodedText}`, '_blank');
+      
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error) {
+      toast.error('Failed to process message.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -21,21 +47,21 @@ const Contact = () => {
     {
       icon: <MapPin size={28} className="text-blue-500" />,
       title: "Our Address",
-      details: "123 Innovation Drive, Tech Campus, CA 90210",
+      details: "Gla University Mathura",
       color: "from-blue-500/20 to-blue-600/5",
       borderColor: "border-blue-500/30"
     },
     {
       icon: <Phone size={28} className="text-purple-500" />,
       title: "Phone Number",
-      details: "+1 (800) 123-4567\nMon-Fri: 9am - 5pm",
+      details: "+91 8171683933\nMon-Fri: 9am - 5pm",
       color: "from-purple-500/20 to-purple-600/5",
       borderColor: "border-purple-500/30"
     },
     {
       icon: <Mail size={28} className="text-pink-500" />,
       title: "Email Address",
-      details: "contact@techcollege.edu\nsupport@techcollege.edu",
+      details: "deepak.kumar@gla\nvishal.singh@gla.ac",
       color: "from-pink-500/20 to-pink-600/5",
       borderColor: "border-pink-500/30"
     }
@@ -78,33 +104,61 @@ const Contact = () => {
             
             <h2 className="text-2xl font-bold mb-8 text-slate-800 dark:text-white">Send us a Message</h2>
             
-            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); }}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               {/* Floating Label Input - Name */}
               <div className="relative z-0 w-full mb-6 group">
-                <input type="text" name="name" id="name" className="block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <input 
+                  type="text" 
+                  name="name" 
+                  id="name" 
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                  placeholder=" " 
+                  required 
+                />
                 <label htmlFor="name" className="peer-focus:font-medium absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Your Name</label>
               </div>
 
               {/* Floating Label Input - Email */}
               <div className="relative z-0 w-full mb-6 group">
-                <input type="email" name="email" id="email" className="block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <input 
+                  type="email" 
+                  name="email" 
+                  id="email" 
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                  placeholder=" " 
+                  required 
+                />
                 <label htmlFor="email" className="peer-focus:font-medium absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email Address</label>
               </div>
 
               {/* Floating Label Input - Message */}
               <div className="relative z-0 w-full mb-6 group">
-                <textarea name="message" id="message" rows="4" className="block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer resize-none" placeholder=" " required></textarea>
+                <textarea 
+                  name="message" 
+                  id="message" 
+                  rows="4" 
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  className="block py-2.5 px-0 w-full text-sm text-slate-900 bg-transparent border-0 border-b-2 border-slate-300 appearance-none dark:text-white dark:border-slate-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer resize-none" 
+                  placeholder=" " 
+                  required
+                ></textarea>
                 <label htmlFor="message" className="peer-focus:font-medium absolute text-sm text-slate-500 dark:text-slate-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Your Message</label>
               </div>
 
               <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={!isSubmitting ? { scale: 1.02 } : {}}
+                whileTap={!isSubmitting ? { scale: 0.98 } : {}}
                 type="submit" 
-                className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl text-white font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30 transition-all duration-300"
+                disabled={isSubmitting}
+                className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl text-white font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Send Message
-                <Send size={18} />
+                {isSubmitting ? 'Sending...' : 'Send Message To WhatsApp'}
+                {!isSubmitting && <Send size={18} />}
               </motion.button>
             </form>
           </motion.div>
@@ -116,9 +170,9 @@ const Contact = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="rounded-3xl overflow-hidden glass shadow-2xl border-slate-200 dark:border-slate-700 relative min-h-[400px]"
           >
-            {/* Using a Google Maps embed iframe */}
+            {/* Using a Google Maps embed iframe for GLA University */}
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d105073.44367005252!2d-118.29179684999999!3d34.02073045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2c75ddc27da13%3A0xe22fdf6f254608f4!2sLos%20Angeles%2C%20CA%2C%20USA!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+              src="https://maps.google.com/maps?q=27.6056,77.5937&z=15&output=embed" 
               className="absolute inset-0 w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
               allowFullScreen="" 
               loading="lazy" 
@@ -156,7 +210,6 @@ const Contact = () => {
 
       </div>
 
-      <Footer />
     </div>
   );
 };

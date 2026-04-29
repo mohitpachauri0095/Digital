@@ -12,6 +12,7 @@ const ChatbotWidget = () => {
     }
   ]);
   const [input, setInput] = useState('');
+  const [studentType, setStudentType] = useState('General');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -35,9 +36,10 @@ const ChatbotWidget = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/chat', { message: userMsg });
+      const response = await axios.post('http://localhost:5000/api/chat', { message: userMsg, studentType });
+      const replyText = response?.data?.reply || "Sorry, I couldn't understand that properly.";
       setMessages(prev => [...prev, { 
-        text: response.data.reply, 
+        text: replyText, 
         isBot: true,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
@@ -138,7 +140,17 @@ const ChatbotWidget = () => {
           </div>
 
           {/* Input Area */}
-          <div className="p-3 bg-white border-t border-slate-200">
+          <div className="p-3 bg-white border-t border-slate-200 flex flex-col gap-2">
+            <select 
+              value={studentType} 
+              onChange={(e) => setStudentType(e.target.value)}
+              className="w-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-medium rounded-lg px-3 py-1.5 focus:ring-1 focus:ring-college-secondary outline-none transition-shadow"
+            >
+              <option value="General">General Student</option>
+              <option value="B.Tech">B.Tech Student</option>
+              <option value="MCA">MCA Student</option>
+              <option value="MBA">MBA Student</option>
+            </select>
             <form onSubmit={handleSend} className="flex gap-2">
               <input
                 type="text"
